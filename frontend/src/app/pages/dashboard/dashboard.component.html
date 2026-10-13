@@ -1,0 +1,144 @@
+<header class="page-head">
+  <h1>Hello Evano 👋🏼,</h1>
+  <label class="search white">
+    <img src="assets/icons/search.svg" alt="" width="24" height="24" />
+    <input type="search" placeholder="Search" [ngModel]="query()" (ngModelChange)="query.set($event)" />
+  </label>
+</header>
+
+@if (error()) {
+  <div class="error">{{ error() }}</div>
+}
+
+@if (stats(); as s) {
+  <section class="card metrics">
+    <div class="metric">
+      <img src="assets/icons/metric-earning.svg" alt="" width="84" height="84" />
+      <div>
+        <div class="metric-label">Revenue</div>
+        <div class="metric-value">{{ compact(s.revenue.value) }}</div>
+        <div class="trend">
+          <img [src]="s.revenue.changePercent >= 0 ? 'assets/icons/arrow-up.svg' : 'assets/icons/arrow-down.svg'" alt="" width="20" height="20" />
+          <b [class]="trendClass(s.revenue)">{{ s.revenue.changePercent }}%</b> this month
+        </div>
+      </div>
+    </div>
+
+    <div class="metric">
+      <img src="assets/icons/metric-balance.svg" alt="" width="84" height="84" />
+      <div>
+        <div class="metric-label">Pipeline</div>
+        <div class="metric-value">{{ compact(s.pipeline.value) }}</div>
+        <div class="trend">
+          <img [src]="s.pipeline.changePercent >= 0 ? 'assets/icons/arrow-up.svg' : 'assets/icons/arrow-down.svg'" alt="" width="20" height="20" />
+          <b [class]="trendClass(s.pipeline)">{{ s.pipeline.changePercent }}%</b> this month
+        </div>
+      </div>
+    </div>
+
+    <div class="metric">
+      <img src="assets/icons/metric-sales.svg" alt="" width="84" height="84" />
+      <div>
+        <div class="metric-label">Deals won</div>
+        <div class="metric-value">{{ s.dealsWon.value }}</div>
+        <div class="trend">
+          <img [src]="s.dealsWon.changePercent >= 0 ? 'assets/icons/arrow-up.svg' : 'assets/icons/arrow-down.svg'" alt="" width="20" height="20" />
+          <b [class]="trendClass(s.dealsWon)">{{ s.dealsWon.changePercent }}%</b> this month
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="card overview">
+      <h2 class="card-title">Overview</h2>
+      <p class="card-sub">Monthly revenue (won deals)</p>
+
+      <div class="chart">
+        @for (bar of bars(); track bar.month) {
+          <button type="button" class="bar-col" [class.active]="bar.month === selectedMonth()"
+                  (mouseenter)="selectedMonth.set(bar.month)" (click)="selectedMonth.set(bar.month)">
+            @if (bar.month === selectedMonth()) {
+              <span class="tooltip">
+                <img src="assets/icons/arrow-up.svg" alt="" width="14" height="14" />{{ bar.share }}%
+              </span>
+            }
+            <span class="bar" [style.height.px]="bar.height"></span>
+            <span class="bar-label">{{ bar.label }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    <section class="card customers">
+      <h2 class="card-title">Customers</h2>
+      <p class="card-sub">New in the last 30 days</p>
+
+      <div class="donut">
+        <svg viewBox="0 0 200 200" width="200" height="200" aria-hidden="true">
+          <defs>
+            <linearGradient id="donut-gradient" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0" stop-color="#eaabf0" />
+              <stop offset="0.55" stop-color="#5932ea" />
+              <stop offset="1" stop-color="#ff2d87" />
+            </linearGradient>
+          </defs>
+          <circle cx="100" cy="100" [attr.r]="donutRadius" fill="none" stroke="#f2efff" stroke-width="22" />
+          <circle cx="100" cy="100" [attr.r]="donutRadius" fill="none" stroke="url(#donut-gradient)" stroke-width="22"
+                  stroke-linecap="round" transform="rotate(-90 100 100)"
+                  [attr.stroke-dasharray]="donutLength" [attr.stroke-dashoffset]="donutOffset()" />
+        </svg>
+        <div class="donut-label">
+          <b>{{ s.customers.newPercent }}%</b>
+          <span>Total New Customers</span>
+        </div>
+      </div>
+    </section>
+  </div>
+}
+
+<section class="card deals">
+  <div class="deals-head">
+    <h2 class="card-title">Recent Deals</h2>
+    <div class="toolbar">
+      <label class="search">
+        <img src="assets/icons/search.svg" alt="" width="24" height="24" />
+        <input type="search" placeholder="Search" [ngModel]="query()" (ngModelChange)="query.set($event)" />
+      </label>
+      <select class="select" [ngModel]="period()" (ngModelChange)="period.set(+$event)">
+        <option [ngValue]="30">Last 30 days</option>
+        <option [ngValue]="90">Last 90 days</option>
+        <option [ngValue]="0">All time</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="data">
+      <thead>
+        <tr><th>Deal</th><th>Customer</th><th>Stage</th><th>Amount</th><th>Created</th></tr>
+      </thead>
+      <tbody>
+        @for (d of filteredDeals(); track d.id) {
+          <tr>
+            <td>
+              <div class="cell-flex">
+                <span class="avatar">{{ initials(d.title) }}</span>
+                <div>
+                  <div class="primary">{{ d.title }}</div>
+                  <div class="secondary">{{ d.description }}</div>
+                </div>
+              </div>
+            </td>
+            <td>{{ d.customerName }}</td>
+            <td><span class="badge" [class]="'badge ' + d.stage">{{ d.stage }}</span></td>
+            <td class="amount">{{ d.amount | currency: 'USD' : 'symbol' : '1.0-0' }}</td>
+            <td>{{ d.createdAt | date: 'mediumDate' }}</td>
+          </tr>
+        } @empty {
+          <tr><td colspan="5" class="empty">No deals found.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

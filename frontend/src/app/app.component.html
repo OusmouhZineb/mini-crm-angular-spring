@@ -1,0 +1,30 @@
+<aside class="sidebar">
+  <div class="brand">
+    <img src="assets/icons/brand.svg" alt="" width="37" height="37" />
+    <span class="brand-name">Mini CRM</span>
+    <span class="brand-version">v.01</span>
+  </div>
+
+  <nav>
+    @for (item of nav; track item.path) {
+      <a class="nav-item" [routerLink]="item.path" routerLinkActive="active">
+        <img [src]="item.icon" alt="" width="24" height="24" />
+        <span>{{ item.label }}</span>
+        <img class="chevron" src="assets/icons/chevron-right.svg" alt="" width="16" height="16" />
+      </a>
+    }
+  </nav>
+
+  <div class="profile">
+    <img src="assets/icons/avatar.png" alt="" width="42" height="42" />
+    <div>
+      <div class="name">Evano</div>
+      <div class="role">Project Manager</div>
+    </div>
+    <img class="chevron" src="assets/icons/chevron-down-profile.svg" alt="" width="24" height="24" />
+  </div>
+</aside>
+
+<main class="content">
+  <router-outlet />
+</main>

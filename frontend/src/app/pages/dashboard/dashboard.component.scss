@@ -1,0 +1,177 @@
+:host {
+  display: block;
+}
+
+.metrics {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 24px;
+  padding: 31px 40px;
+  margin-bottom: 28px;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.metric-label {
+  font-size: 14px;
+  letter-spacing: -0.14px;
+  color: var(--label);
+}
+
+.metric-value {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.32px;
+  color: #333;
+}
+
+.trend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 12px;
+  letter-spacing: -0.12px;
+  color: #292d32;
+
+  .up {
+    color: var(--green);
+  }
+
+  .down {
+    color: var(--red);
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 36px;
+  margin-bottom: 28px;
+}
+
+.overview,
+.customers {
+  min-height: 378px;
+}
+
+.chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 6px;
+  height: 270px;
+  margin-top: 24px;
+}
+
+.bar-col {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.bar {
+  width: 100%;
+  max-width: 31px;
+  border-radius: 8px;
+  background: var(--primary-soft);
+  transition: height 0.3s, background 0.2s;
+}
+
+.bar-label {
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: -0.08px;
+  color: #4f4f4f;
+}
+
+.active {
+  .bar {
+    max-width: 40px;
+    background: var(--primary);
+    box-shadow: 0 8px 12px rgba(135, 145, 233, 0.3);
+  }
+
+  .bar-label {
+    font-size: 10px;
+    font-weight: 700;
+  }
+}
+
+.tooltip {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: #000;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  transform: translate(-50%, -100%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.donut {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.donut-label {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+  text-align: center;
+
+  b {
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  span {
+    font-size: 12px;
+    line-height: 1.1;
+  }
+}
+
+.deals {
+  padding-bottom: 12px;
+}
+
+.deals-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
